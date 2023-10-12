@@ -1,2 +1,2 @@
 Link to binder to build the notebook
-https://hub.ovh2.mybinder.org/user/hugodataanalyst-metrocaranalysis-0fzyzgvr/lab/tree/globaldeftest.ipynb
+https://mybinder.org/v2/gh/HugoDataAnalyst/MetroCarAnalysis/HEAD
