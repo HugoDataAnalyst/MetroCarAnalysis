@@ -1,4 +1,5 @@
-Link to binder to build the notebook:[MyBinder](https://mybinder.org/v2/gh/HugoDataAnalyst/MetroCarAnalysis/HEAD){:target="_blank"}
+Link to binder to build the notebook:
+https://mybinder.org/v2/gh/HugoDataAnalyst/MetroCarAnalysis/HEAD
 
 To do:
 - Improve comments in the code;
