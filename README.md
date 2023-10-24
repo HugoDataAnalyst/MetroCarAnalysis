@@ -1,7 +1,6 @@
 # ReadMe
 
 ## Link for binder to build the notebook:
-<a href="https://mybinder.org/v2/gh/HugoDataAnalyst/MetroCarAnalysis/HEAD{:target="_blank"}">Open Binder</a>
 [Open Binder](https://mybinder.org/v2/gh/HugoDataAnalyst/MetroCarAnalysis/HEAD)
 
 ![METROCAR](https://github.com/HugoDataAnalyst/MetroCarAnalysis/blob/main/metrocar.png)
