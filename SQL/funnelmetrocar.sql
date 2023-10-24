@@ -195,7 +195,17 @@ SELECT * FROM test
 
 --156,211
 -- surgepricingdata
-SELECT EXTRACT(HOUR FROM request_ts) AS request_hour, COUNT(*) AS num_requests
+SELECT 
+EXTRACT(HOUR FROM request_ts) AS request_hour, 
+COUNT(*) AS num_requests
 FROM ride_requests
 GROUP BY request_hour
 ORDER BY request_hour;
+-- minimum rides requested per user
+
+SELECT 
+user_id, 
+COUNT(ride_id) AS rides
+FROM ride_requests
+GROUP BY user_id
+ORDER BY rides ASC;
