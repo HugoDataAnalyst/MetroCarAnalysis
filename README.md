@@ -1,5 +1,4 @@
 # ReadMe
-<<<<<<< HEAD
 ## METROCAR
 This project is based on a ride-sharing application data that has the purpose to respond to 5 business questions and provide further insights based on the data:
 - What steps of the funnel should we research and improve? Are there any specific drop-off points preventing users from completing their first ride?
@@ -7,11 +6,7 @@ This project is based on a ride-sharing application data that has the purpose to
 - What age groups perform best at each stage of our funnel? Which age group(s) likely contain our target customers?
 - Surge pricing is the practice of increasing the price of goods or services when there is the greatest demand for them. If we want to adopt a price-surging strategy, what does the distribution of ride requests look like throughout the day?
 - What part of our funnel has the lowest conversion rate? What can we do to improve this part of the funnel?
-## Link to binder to build the notebook:
-=======
-
 ## Link for binder to build the notebook:
->>>>>>> 23ab3949893bd5086328c3ca028dbda59eadf554
 [Open Binder](https://mybinder.org/v2/gh/HugoDataAnalyst/MetroCarAnalysis/HEAD)
 
 ![METROCAR](https://github.com/HugoDataAnalyst/MetroCarAnalysis/blob/main/metrocar.png)
