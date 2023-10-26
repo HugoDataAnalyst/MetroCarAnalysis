@@ -12,7 +12,7 @@ This project is based on a ride-sharing application data that has the purpose to
 [Open Binder](https://mybinder.org/v2/gh/HugoDataAnalyst/MetroCarAnalysis/HEAD)
 
 ## To do:
-- Finish the written report and push it to GitHub as well as the presentation video.
+- Finish the presentation video, review the report.
 
 ## For a perfect world of coding:
 - Adjust global filter definitions and organize graphics based on dataset to avoid repetitions.
