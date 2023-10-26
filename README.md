@@ -1,6 +1,4 @@
-# ReadMe
-
-## METROCAR
+# METROCAR
 ![METROCAR](https://github.com/HugoDataAnalyst/MetroCarAnalysis/blob/main/metrocar.png)
 
 This project is based on a ride-sharing application data that has the purpose to respond to 5 business questions and provide further insights based on the data:
@@ -14,8 +12,9 @@ This project is based on a ride-sharing application data that has the purpose to
 [Open Binder](https://mybinder.org/v2/gh/HugoDataAnalyst/MetroCarAnalysis/HEAD)
 
 ## To do:
-- Improve comments in the code.
-- Look for optimizations of the defined global filters.
-- Perhaps the addition of two separate Merge buttons Age Range & Platform
 - Finish the written report and push it to GitHub as well as the presentation video.
 - Properly label and group the SQL files.
+
+## For a perfect world of coding:
+- Adjust global filter definitions and organize graphics based on dataset to avoid repetitions.
+- Introduce and reformat all of the Python to use Dash Library for a better user experience.
