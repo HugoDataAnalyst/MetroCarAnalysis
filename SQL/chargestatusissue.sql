@@ -1,3 +1,4 @@
+-- Define a common table expression (CTE) 'charge_decline' to gather data related to charge declines
 WITH charge_decline AS (
 SELECT
 	r.user_id,
@@ -13,6 +14,7 @@ LEFT JOIN reviews r ON rr.ride_id = r.ride_id
 LEFT JOIN transactions t ON rr.ride_id = t.ride_id
 ORDER BY user_id, review_id, charge_status DESC
 ),
+-- Define a CTE 'charge_statistics' to calculate statistics on charge status
 charge_statistics AS (
 SELECT 
 	charge_status,
@@ -25,9 +27,10 @@ FROM charge_decline
 WHERE charge_status IS NOT NULL
 GROUP BY charge_status
 )
-
+-- Select the result from the 'charge_statistics' CTE
 SELECT * FROM charge_statistics;
 
+-- Define a CTE 'user_declines' to analyze charge declines at the user level
 WITH user_declines AS (
 SELECT 
     rr.user_id,
@@ -46,9 +49,10 @@ GROUP BY rr.user_id
 HAVING SUM(CASE WHEN t.charge_status = 'Decline' THEN 1 ELSE 0 END) > 1
 ORDER BY decline_count DESC
 )
+-- Select the result from the 'user_declines' CTE
 SELECT * FROM user_declines;
 
-
+-- Define a CTE 'driver_declines' to analyze charge declines at the driver level
 WITH driver_declines AS (
 SELECT 
     rr.driver_id,
@@ -67,9 +71,6 @@ GROUP BY rr.driver_id
 HAVING SUM(CASE WHEN t.charge_status = 'Decline' THEN 1 ELSE 0 END) > 1
 ORDER BY decline_count DESC
 )
+-- Select the result from the 'driver_declines' CTE
 SELECT * FROM driver_declines;
-
-
-
-
 

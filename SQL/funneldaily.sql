@@ -1,9 +1,4 @@
---TODO LIST
--- verificar rides no funnelstep 4
--- recriar isto mas retirar os pct_value/top e adicionar daily_date
--- começar python para visualização
--- verificar ratings com drivers para poder fazer sugestão de remoção de condutores com < x rating
--- extrair os dados do charge_status
+-- Define a CTE 'user_ride_status' to gather information about users' age range and platform
 WITH user_ride_status AS (
   SELECT
     rr.user_id,
@@ -14,6 +9,7 @@ WITH user_ride_status AS (
   LEFT JOIN app_downloads ad ON s.session_id = ad.app_download_key
   GROUP BY rr.user_id, s.age_range, ad.platform
 ),
+-- Define a CTE 'ride_requested_status' to track ride requests and their timestamps
 ride_requested_status AS (
   SELECT
     DISTINCT (user_id),
@@ -23,6 +19,7 @@ ride_requested_status AS (
   	request_ts
   FROM ride_requests
 ),
+-- Define a CTE 'totals_signups' to calculate the total number of signups
 totals_signups AS (
   SELECT
     COUNT(DISTINCT s.user_id) AS total_users_signed_up,
@@ -34,6 +31,7 @@ totals_signups AS (
   ON s.session_id = ad.app_download_key
   GROUP BY s.age_range, ad.platform, daily_date
 ),
+-- Define a CTE 'totals_rides_requested' to calculate ride request statistics
 totals_rides_requested AS (
   SELECT
     COUNT(*) AS total_users_signed_up,
@@ -48,6 +46,7 @@ totals_rides_requested AS (
   LEFT JOIN ride_requested_status rrs ON s.user_id = rrs.user_id
   GROUP BY s.age_range, urs.platform, daily_date
 ),
+-- Define a CTE 'totals_rides_completed' to calculate statistics for completed rides
 totals_rides_completed AS (
  SELECT
     COUNT(DISTINCT rr.user_id) AS total_users_ride_completed,
@@ -72,6 +71,7 @@ totals_rides_completed AS (
   WHERE rr.dropoff_ts IS NOT NULL AND t.charge_status = 'Approved'
   GROUP BY s.age_range, urs.platform, daily_date
 ),
+-- Define a CTE 'totals_downloads' to count app downloads per platform
 totals_downloads AS (
   SELECT
     COUNT(app_download_key) AS total_downloads,
@@ -81,6 +81,7 @@ totals_downloads AS (
   FROM app_downloads
   GROUP BY platform, daily_date
 ),
+-- Define a CTE 'reviews_per_user' to count the number of reviews per user
 reviews_per_user AS (
   SELECT
     r.user_id,
@@ -88,6 +89,7 @@ reviews_per_user AS (
   FROM reviews r
   GROUP BY r.user_id
 ),
+-- Define a CTE 'funnel_stages' to construct a funnel of user interactions
 funnel_stages AS (
   SELECT
     1 AS funnel_step,
@@ -145,7 +147,8 @@ funnel_stages AS (
   	daily_date
   FROM totals_rides_completed
 ),
-test AS (
+-- Define a CTE 'final' to prepare data for further analysis
+final AS (
 SELECT 
   funnel_step,
   funnel_name,
@@ -161,12 +164,14 @@ SELECT
 FROM funnel_stages
 ORDER BY funnel_step, daily_date, platform, age_range, funnel_step DESC
 )
-SELECT * FROM test
---SELECT SUM(CASE WHEN funnel_step = '4' THEN users ELSE 0 END) FROM test
---SELECT SUM(total_usd), SUM(total_reviews), SUM(CASE WHEN funnel_step = '4' THEN value ELSE 0  END  ) FROM test;
+SELECT * FROM final
+/*
+Additional commented queries to confirm the dataset values.
+*/
+--SELECT SUM(CASE WHEN funnel_step = '4' THEN users ELSE 0 END) FROM final;
+--SELECT SUM(total_usd), SUM(total_reviews), SUM(CASE WHEN funnel_step = '4' THEN value ELSE 0  END  ) FROM final;
+--SELECT SUM(CASE WHEN funnel_step = '1' THEN users ELSE 0 END) AS downloads, SUM(CASE WHEN funnel_step = '2' THEN users ELSE 0 END) AS signups, SUM(CASE WHEN funnel_step = '3' THEN users ELSE 0 END) AS rides_requests, SUM(CASE WHEN funnel_step = '4' THEN users ELSE 0 END) AS rides_completed FROM final ;
 
---SELECT SUM(CASE WHEN funnel_step = '1' THEN users ELSE 0 END) AS downloads, SUM(CASE WHEN funnel_step = '2' THEN users ELSE 0 END) AS signups, SUM(CASE WHEN funnel_step = '3' THEN users ELSE 0 END) AS rides_requests, SUM(CASE WHEN funnel_step = '4' THEN users ELSE 0 END) AS rides_completed FROM test 
---156,211
 
 
 

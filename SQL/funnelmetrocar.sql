@@ -1,27 +1,4 @@
---TODO LIST
--- verificar rides no funnelstep 4?!?
--- começar python para visualização
-
--- Perguntas do projecto:
--- What steps of the funnel should we research and improve? 
--- Are there any specific drop-off points preventing users from completing their first ride?
--- 1.
--- Metrocar currently supports 3 different platforms: ios, android, and web. 
--- To recommend where to focus our marketing budget for the upcoming year, what insights can we make based on the platform?
--- 2.
--- What age groups perform best at each stage of our funnel? Which age group(s) likely contain our target customers?
--- 3.
--- Surge pricing is the practice of increasing the price of goods or services when there is the greatest demand for them.
--- If we want to adopt a price-surging strategy, what does the distribution of ride requests look like throughout the day?
--- 4.
--- What part of our funnel has the lowest conversion rate? What can we do to improve this part of the funnel?
-
--- AVANÇADO:
--- usar os dados extraídos da charge_status/user_declines/driver_declines para fazer visualizações.
--- Criar gráficos dos driver_rating_distribution e dar merge dos csv no python para poder filtrar condutores maus e bons.
-
-
-
+-- Define a CTE 'user_ride_status' to gather information about users, age range, and platform
 WITH user_ride_status AS (
   SELECT
     rr.user_id,
@@ -32,6 +9,7 @@ WITH user_ride_status AS (
   LEFT JOIN app_downloads ad ON s.session_id = ad.app_download_key
   GROUP BY rr.user_id, s.age_range, ad.platform
 ),
+-- Define a CTE 'ride_requested_status' to track ride requests and their timestamps
 ride_requested_status AS (
   SELECT
     DISTINCT (user_id),
@@ -40,6 +18,7 @@ ride_requested_status AS (
     cancel_ts
   FROM ride_requests
 ),
+-- Define a CTE 'totals_signups' to calculate the total number of signups
 totals_signups AS (
   SELECT
     COUNT(DISTINCT s.user_id) AS total_users_signed_up,
@@ -50,6 +29,7 @@ totals_signups AS (
   ON s.session_id = ad.app_download_key
   GROUP BY s.age_range, ad.platform
 ),
+-- Define a CTE 'totals_rides_requested' to calculate ride request statistics
 totals_rides_requested AS (
   SELECT
     COUNT(*) AS total_users_signed_up,
@@ -63,6 +43,7 @@ totals_rides_requested AS (
   LEFT JOIN ride_requested_status rrs ON s.user_id = rrs.user_id
   GROUP BY s.age_range, urs.platform
 ),
+-- Define a CTE 'totals_rides_completed' to calculate statistics for completed rides
 totals_rides_completed AS (
  SELECT
     COUNT(DISTINCT rr.user_id) AS total_users_ride_completed,
@@ -86,6 +67,7 @@ totals_rides_completed AS (
   WHERE rr.dropoff_ts IS NOT NULL AND t.charge_status = 'Approved'
   GROUP BY s.age_range, urs.platform
 ),
+-- Define a CTE 'totals_downloads' to count app downloads per platform
 totals_downloads AS (
   SELECT
     COUNT(DISTINCT app_download_key) AS total_downloads,
@@ -101,6 +83,7 @@ UNION ALL
   FROM signups s
   LEFT JOIN app_downloads ad ON s.session_id = ad.app_download_key
 ),
+-- Define a CTE 'reviews_per_user' to count the number of reviews per user
 reviews_per_user AS (
   SELECT
     r.user_id,
@@ -108,6 +91,7 @@ reviews_per_user AS (
   FROM reviews r
   GROUP BY r.user_id
 ),
+-- Define a CTE 'funnel_stages' to construct a funnel of user interactions
 funnel_stages AS (
   SELECT
     1 AS funnel_step,
@@ -161,7 +145,8 @@ funnel_stages AS (
     avg_rating::numeric
   FROM totals_rides_completed
 ),
-test AS (
+-- Define a CTE 'final' to prepare data for further analysis
+final AS (
 SELECT 
   funnel_step,
   funnel_name,
@@ -188,21 +173,20 @@ SELECT
 FROM funnel_stages
 ORDER BY funnel_step, platform, age_range, users
 )
+-- Select data from the 'final' CTE for further processing
+SELECT * FROM final;
+--SELECT SUM(total_usd), SUM(total_reviews), SUM(CASE WHEN funnel_step = '4' THEN value ELSE 0  END  ) FROM final;
 
-SELECT * FROM test
---SELECT SUM(total_usd), SUM(total_reviews), SUM(CASE WHEN funnel_step = '4' THEN value ELSE 0  END  ) FROM test;
 
-
---156,211
--- surgepricingdata
+-- Select surge-pricing data
 SELECT 
 EXTRACT(HOUR FROM request_ts) AS request_hour, 
 COUNT(*) AS num_requests
 FROM ride_requests
 GROUP BY request_hour
 ORDER BY request_hour;
--- minimum rides requested per user
 
+-- Select the minimum rides requested per user data
 SELECT 
 user_id, 
 COUNT(ride_id) AS rides

@@ -13,8 +13,8 @@ This project is based on a ride-sharing application data that has the purpose to
 
 ## To do:
 - Finish the written report and push it to GitHub as well as the presentation video.
-- Properly label and group the SQL files.
 
 ## For a perfect world of coding:
 - Adjust global filter definitions and organize graphics based on dataset to avoid repetitions.
 - Introduce and reformat all of the Python to use Dash Library for a better user experience.
+- Instead of multiple SQL files, combine most of them in a global CTE and filter out the final result for some of them based on the needed data.
